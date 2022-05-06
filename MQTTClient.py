@@ -16,7 +16,6 @@ def on_publish(client, userdata, mid, properties=None):
         print("Published " +str(mid))
     else:
         print("Not published")
-    print("mid: " + str(mid))
 
 
 # print which topic was subscribed to
@@ -34,10 +33,14 @@ def on_subscribe(client, userdata, mid, granted_qos, properties=None):
 
 # print message, useful for checking if it was successful
 def on_message(client, userdata, msg):
-    """
-        Prints a mqtt message to stdout ( used as callback for subscribe )
-        :param client: the client itself
-        :param userdata: userdata is set when initiating the client, here it is userdata=None
-        :param msg: the message with topic and payload
-    """
+
+    if str(msg.payload[0]) == '0':
+        gp.output(client.REDPIN, False)
+    else:
+        gp.output(client.REDPIN, True)
+    if str(msg.payload[1]) == '0':
+        gp.output(client.BLUEPIN, False)
+    else:
+        gp.output(client.BLUEPIN, True)
+
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))

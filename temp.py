@@ -13,8 +13,7 @@ temperature = None
 usr = "dhtsensor"
 psw = "Password1"
 conn = "connection_string"
-toph = "plant/humidity"
-topt = "plant/temperature"
+top = "plant/dht"
 hostname = '40aa8266336d412198db9594ff2f47ed.s1.eu.hivemq.cloud'
 
 #new instance of a client
@@ -31,10 +30,10 @@ client.username_pw_set(usr, psw)
 
 
 #connection loop
-client.loop_start()
 client.connect(hostname, 8883)
+client.loop_start()
 while not client.connected_flag: #wait in loop
-    print("In wait loop1")
+    print("In wait loop 1, connection DHT")
     time.sleep(1)
 client.loop_stop() 
 
@@ -43,9 +42,14 @@ client.loop_stop()
 while True: #wait in loop
     client.loop_start()
     time.sleep(10)
-    client.published_flag = False   
+    client.published_flag = False  
+    humidity, temperature = "20"
+    """
+    while humidity is not None and temperature is not None:
+        humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, DHT_PIN)
+    """
     while not client.published_flag:
-        client.publish('home', '00', 1)
-        print("In wait loop1")
+        client.publish(top,"H:"+str(humidity)+",T:"+str(temperature) , 1)
+        print("In wait loop2, reading DHT")
         time.sleep(1)
     client.loop_stop() 
