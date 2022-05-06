@@ -9,6 +9,6 @@ client  = MQTTClient("LED")
 user = "led"
 psw  = "password"
 conn = "connection_string"
-topl = "/plant/led"
+topl = "plant/led"
 
 subscribe_to_topic(client, user, psw, conn, topl, 1)
