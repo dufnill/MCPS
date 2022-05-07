@@ -1,4 +1,6 @@
 import paho.mqtt.client as paho
+#import RPi.GPIO as gp
+
 
 
 # setting callbacks for different events to see if it works, print the message etc.
@@ -20,27 +22,20 @@ def on_publish(client, userdata, mid, properties=None):
 
 # print which topic was subscribed to
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
-    """
-        Prints a reassurance for successfully subscribing
-        :param client: the client itself
-        :param userdata: userdata is set when initiating the client, here it is userdata=None
-        :param mid: variable returned from the corresponding publish() call, to allow outgoing messages to be tracked
-        :param granted_qos: this is the qos that you declare when subscribing, use the same one for publishing
-        :param properties: can be used in MQTTv5, but is optional
-    """
     print("Subscribed: " + str(mid) + " " + str(granted_qos))
 
 
 # print message, useful for checking if it was successful
 def on_message(client, userdata, msg):
 
-    if str(msg.payload[0]) == '0':
-        gp.output(client.REDPIN, False)
-    else:
+    action = str(msg.payload[0])
+    if action == '1':
         gp.output(client.REDPIN, True)
-    if str(msg.payload[1]) == '0':
-        gp.output(client.BLUEPIN, False)
-    else:
+    elif action == '2':
+        gp.output(client.REDPIN, False)
+    if action == '3':
         gp.output(client.BLUEPIN, True)
+    else:
+        gp.output(client.BLUEPIN, False)
 
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))

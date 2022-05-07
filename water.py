@@ -3,6 +3,7 @@ import time
 
 from MQTTClient import on_connect, on_message, on_publish, on_subscribe
 import paho.mqtt.client as paho
+import RPi.GPIO as gp
 
 """HYG_PIN = 8
 water = None
