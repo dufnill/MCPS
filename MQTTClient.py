@@ -1,7 +1,5 @@
 import paho.mqtt.client as paho
-#import RPi.GPIO as gp
-
-
+import RPi.GPIO as gp
 
 # setting callbacks for different events to see if it works, print the message etc.
 def on_connect(client, userdata, flags, rc, properties=None):
@@ -19,23 +17,20 @@ def on_publish(client, userdata, mid, properties=None):
     else:
         print("Not published")
 
-
 # print which topic was subscribed to
 def on_subscribe(client, userdata, mid, granted_qos, properties=None):
     print("Subscribed: " + str(mid) + " " + str(granted_qos))
 
-
 # print message, useful for checking if it was successful
 def on_message(client, userdata, msg):
-
-    action = str(msg.payload[0])
-    if action == '1':
+    action = str(msg.payload)
+    if '1' in action:
         gp.output(client.REDPIN, True)
-    elif action == '2':
+    elif '2' in action:
         gp.output(client.REDPIN, False)
-    if action == '3':
+    elif '3' in action:
         gp.output(client.BLUEPIN, True)
-    else:
+    elif '4' in action:
         gp.output(client.BLUEPIN, False)
 
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))

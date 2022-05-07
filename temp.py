@@ -1,12 +1,11 @@
-#import Adafruit_DHT
+import Adafruit_DHT
 import os
 import time
 import paho.mqtt.client as paho
 from MQTTClient import on_connect, on_message, on_publish, on_subscribe
 
-#DHT_SENSOR  = Adafruit_DHT.DHT11
+DHT_SENSOR  = Adafruit_DHT.DHT11
 DHT_PIN     = 4
-
 humidity    = None
 temperature = None
 
@@ -28,7 +27,6 @@ client.on_message      = on_message
 client.on_publish      = on_publish
 client.username_pw_set(usr, psw) 
 
-
 #connection loop
 client.connect(hostname, 8883)
 client.loop_start()
@@ -39,17 +37,17 @@ client.loop_stop()
 
 #publishing loop
 
-while True: #wait in loop
+while True: 
     client.loop_start()
-    time.sleep(10)
+    
+    time.sleep(1)
     client.published_flag = False  
-    humidity, temperature = "20"
-    """
-    while humidity is not None and temperature is not None:
-        humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, DHT_PIN)
-    """
-    while not client.published_flag:
-        client.publish(top,"H:"+str(humidity)+",T:"+str(temperature) , 1)
-        print("In wait loop2, reading DHT")
-        time.sleep(1)
+    humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, DHT_PIN)
+    if humidity is not None or temperature is not None:
+        while not client.published_flag:
+            print("H:"+str(int(humidity))+",T:"+str(int(temperature)))
+            client.publish(top,"H:"+str(int(humidity))+",T:"+str(int(temperature)) , 0)
+            print("In wait loop2, reading DHT")
+            time.sleep(1)
+        
     client.loop_stop() 

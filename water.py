@@ -1,16 +1,15 @@
-#import RPi.GPIO as gp
-import time
-
-from MQTTClient import on_connect, on_message, on_publish, on_subscribe
 import paho.mqtt.client as paho
 import RPi.GPIO as gp
+import time
 
-"""HYG_PIN = 8
+from MQTTClient import on_connect, on_message, on_subscribe, on_publish
+
+
+HYG_PIN = 8
 water = None
-
 gp.setwarnings(False)
 gp.setmode(gp.BOARD)
-gp.setup(HYG_PIN, gp.IN)"""
+gp.setup(HYG_PIN, gp.IN)
 
 usr = "hygsensor"
 psw  = "Password1"
@@ -41,18 +40,12 @@ client.loop_stop()
 
 while True: #wait in loop
     client.loop_start()
-    time.sleep(10)
-    client.published_flag = False  
-    humidity, temperature = "20"
-    """
-    while humidity is not None and temperature is not None:
-        humidity, temperature = Adafruit_DHT.read(DHT_SENSOR, DHT_PIN)
-    """
+    time.sleep(1)
+    client.published_flag = False 
+    water = not gp.input(HYG_PIN)
     while not client.published_flag:
-        client.publish(top,"H:"+str(humidity)+",T:"+str(temperature) , 1)
+        print("W:"+str(int(water)))
+        client.publish(top,"W:"+str(int(water)) , 0)
         print("In wait loop2, reading HYGROMETER")
         time.sleep(1)
     client.loop_stop() 
-
-
-

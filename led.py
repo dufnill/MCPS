@@ -1,12 +1,10 @@
-
-
-#import RPi.GPIO as gp
+import RPi.GPIO as gp
 from MQTTClient import on_connect, on_message, on_publish, on_subscribe
 import paho.mqtt.client as paho
 import RPi.GPIO as gp
 import time
+import sys
 
-"""
 BLUE_PIN= 15
 RED_PIN = 16
 gp.setwarnings(False)
@@ -15,7 +13,6 @@ gp.setup(RED_PIN, gp.OUT)
 gp.setup(BLUE_PIN, gp.OUT)
 gp.output(RED_PIN, False)
 gp.output(BLUE_PIN, False)
-"""
 
 usr = "ledactuator"
 psw  = "Password1"
@@ -35,7 +32,6 @@ client.on_message      = on_message
 client.on_publish      = on_publish
 client.username_pw_set(usr, psw) 
 
-
 #connection loop
 client.connect(hostname, 8883)
 client.loop_start()
@@ -45,8 +41,17 @@ while not client.connected_flag: #wait in loop
 client.loop_stop() 
 
 #subscribing loop
-
 client.loop_start()
-client.subscribe(top, 2)
+client.subscribe(top, 0 )
 time.sleep(3)
-client.loop_stop()
+client.loop_stop() 
+
+if client.on_subscribe:
+    while True:
+        try:
+            client.loop()
+            time.sleep(1)
+        except KeyboardInterrupt:
+            gp.output(client.BLUEPIN, False)
+            gp.output(client.REDPIN, False)
+            sys.exit()
