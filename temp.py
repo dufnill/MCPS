@@ -15,8 +15,8 @@ temperature = None
 usr = os.environ['USRDHT']
 psw = os.environ['PSW']
 device = os.environ['DEVNAME']
+hostname = os.environ['HOSTNAME']
 top = "device/"+device+"/dht"
-hostname = '40aa8266336d412198db9594ff2f47ed.s1.eu.hivemq.cloud'
 
 #new instance of a client
 client = paho.Client(client_id="", clean_session=True, userdata=None, protocol=paho.MQTTv31)
