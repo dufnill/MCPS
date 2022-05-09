@@ -1,23 +1,27 @@
-import RPi.GPIO as gp
 from MQTTClient import on_connect, on_message, on_publish, on_subscribe
+from dotenv import load_dotenv
+
 import paho.mqtt.client as paho
-import RPi.GPIO as gp
+#import RPi.GPIO as gp
 import time
 import sys
+import os
 
-BLUE_PIN= 15
+load_dotenv()
+"""BLUE_PIN= 15
 RED_PIN = 16
 gp.setwarnings(False)
 gp.setmode(gp.BOARD)
 gp.setup(RED_PIN, gp.OUT)
 gp.setup(BLUE_PIN, gp.OUT)
 gp.output(RED_PIN, False)
-gp.output(BLUE_PIN, False)
+gp.output(BLUE_PIN, False)"""
 
-usr = "ledactuator"
-psw  = "Password1"
-top = "plant/led"
-hostname = '40aa8266336d412198db9594ff2f47ed.s1.eu.hivemq.cloud'
+usr = os.environ['USRLED']
+psw  = os.environ['PSW']
+device = os.environ['DEVNAME']
+hostname = os.environ['HOSTNAME']
+top = "plant/"+device+"led"
 
 client = paho.Client(client_id="", clean_session=True, userdata=None, protocol=paho.MQTTv31)
 client.connected_flag = False

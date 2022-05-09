@@ -1,5 +1,5 @@
 import paho.mqtt.client as paho
-import RPi.GPIO as gp
+#import RPi.GPIO as gp
 
 # setting callbacks for different events to see if it works, print the message etc.
 def on_connect(client, userdata, flags, rc, properties=None):
