@@ -1,23 +1,31 @@
+from MQTTClient import on_connect, on_message, on_publish, on_subscribe, getserial
+from dotenv import load_dotenv
+
 import RPi.GPIO as gp
-from MQTTClient import on_connect, on_message, on_publish, on_subscribe
 import paho.mqtt.client as paho
 import RPi.GPIO as gp
 import time
 import sys
+import os
 
-BLUE_PIN= 15
-RED_PIN = 16
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BLUE_PIN= int(os.environ['BLUE_PIN'])
+RED_PIN = int(os.environ['RED_PIN'])
+usr = os.environ['USRLED']
+psw  = os.environ['PSW']
+device = getserial()
+hostname = os.environ['HOSTNAME']
+top = "device/"+str(device)+"/led"
+
 gp.setwarnings(False)
 gp.setmode(gp.BOARD)
 gp.setup(RED_PIN, gp.OUT)
 gp.setup(BLUE_PIN, gp.OUT)
 gp.output(RED_PIN, False)
 gp.output(BLUE_PIN, False)
-
-usr = "ledactuator"
-psw  = "Password1"
-top = "plant/led"
-hostname = '40aa8266336d412198db9594ff2f47ed.s1.eu.hivemq.cloud'
 
 client = paho.Client(client_id="", clean_session=True, userdata=None, protocol=paho.MQTTv31)
 client.connected_flag = False
@@ -42,7 +50,7 @@ client.loop_stop()
 
 #subscribing loop
 client.loop_start()
-client.subscribe(top, 0 )
+client.subscribe(top,0)
 time.sleep(3)
 client.loop_stop() 
 

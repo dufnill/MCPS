@@ -2,18 +2,24 @@ import Adafruit_DHT
 import os
 import time
 import paho.mqtt.client as paho
-from MQTTClient import on_connect, on_message, on_publish, on_subscribe
+from MQTTClient import on_connect, on_message, on_publish, on_subscribe, getserial
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DHT_SENSOR  = Adafruit_DHT.DHT11
-DHT_PIN     = 4
+
+DHT_PIN = int(os.environ['DHT_PIN'])
+usr = os.environ['USRDHT']
+psw = os.environ['PSW']
+device = getserial()
+hostname = os.environ['HOSTNAME']
+top = "device/"+str(device)+"/dht"
+
+
 humidity    = None
 temperature = None
 
-usr = "dhtsensor"
-psw = "Password1"
-conn = "connection_string"
-top = "plant/dht"
-hostname = '40aa8266336d412198db9594ff2f47ed.s1.eu.hivemq.cloud'
 
 #new instance of a client
 client = paho.Client(client_id="", clean_session=True, userdata=None, protocol=paho.MQTTv31)

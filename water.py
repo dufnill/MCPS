@@ -1,21 +1,24 @@
 import paho.mqtt.client as paho
 import RPi.GPIO as gp
 import time
+import os
 
-from MQTTClient import on_connect, on_message, on_subscribe, on_publish
+from MQTTClient import on_connect, on_message, on_subscribe, on_publish, getserial
+from dotenv import load_dotenv
 
+load_dotenv()
+HYG_PIN = int(os.environ['HYG_PIN'])
+usr = os.environ['USRHYG']
+psw  = os.environ['PSW']
+device = getserial()
+hostname = os.environ['HOSTNAME']
+top = "device/"+str(device)+"/water"
 
-HYG_PIN = 8
 water = None
 gp.setwarnings(False)
 gp.setmode(gp.BOARD)
 gp.setup(HYG_PIN, gp.IN)
 
-usr = "hygsensor"
-psw  = "Password1"
-top = "plant/water"
-port = 8883
-hostname = '40aa8266336d412198db9594ff2f47ed.s1.eu.hivemq.cloud'
 
 client = paho.Client(client_id="", clean_session=True, userdata=None, protocol=paho.MQTTv31)
 client.connected_flag = False
